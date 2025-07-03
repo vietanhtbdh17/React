@@ -1,23 +1,45 @@
 import React from 'react';
 import './DisplayInfo.scss';
-
+import logo from './../logo.svg';
 
 class DisplayInfo extends React.Component {
+    constructor(props) {
+        console.log('>>> Call constructor: 0');
 
-    state = {
-        isShowListUser: true
+        super(props);
+        this.state = {
+            isShowListUser: true
+        }
     }
+
+    componentDidMount() {
+        console.log('>>> Call componentDidMount');
+        setTimeout(() => {
+            document.title = 'Viet Anh - ReactJS';
+        }, 3000);
+    }
+
+    componentDidUpdate(prevprops, prevstate, snapshot) {
+        console.log('>>> Call componentDidUpdate', this.props, prevprops);
+        if (this.props.listUser !== prevprops.listUser) {
+            if (this.props.listUser.length === 5) {
+                alert('List user is reached 5 items');
+            }
+        }
+    }
+
     handleShowHide = () => {
         this.setState({
             isShowListUser: !this.state.isShowListUser
         })
     }
     render() {
-        // console.log(this.props);
+        console.log(">>> Call render: 1");
         const { listUser } = this.props;
         // console.table(listUser);
         return (
-            <div>
+            <div className="display-info-container">
+                {/* <img src={logo} alt="" /> */}
                 <div>
                     <span onClick={() => { this.handleShowHide() }}>
 
@@ -30,8 +52,13 @@ class DisplayInfo extends React.Component {
                             // console.log('>>> Check user: ', user);
                             return (
                                 <div key={user.id} className={+user.age > 18 ? 'green' : 'red'}>
-                                    <div>My name's {user.name}</div>
-                                    <div>My age's {user.age}</div>
+                                    <div>
+                                        <div>My name's {user.name}</div>
+                                        <div>My age's {user.age}</div>
+                                    </div>
+                                    <div>
+                                        <button onClick={() => this.props.handleDeleteUser(user.id)}>Delete</button>
+                                    </div>
                                     <hr />
                                 </div>
                             )
